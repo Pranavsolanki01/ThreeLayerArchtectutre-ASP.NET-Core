@@ -12,7 +12,7 @@ namespace DALStudent.Interface
         //method or interface
         Task<List<Student>> GetStudentsAsync();
         Task<Student?> GetStudentByIdAsync(int id);
-		Task AddStudentAsync(Student student);
+	Task AddStudentAsync(Student student);
         Task UpdateStudentAsync(Student student);
         Task DeleteStudentAsync(int id);
     }
