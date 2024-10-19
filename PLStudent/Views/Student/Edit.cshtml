@@ -1,0 +1,52 @@
+﻿@using DALStudent.Entities;
+@model Student;
+@*@model Student;*@
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<form method="post">
+	<div>
+		<h2 class="text-primary">
+			Edit Student
+		</h2>
+		<hr />
+	</div>
+	<div asp-validation-summary="All"></div>
+	<div>
+		<label asp-for="Name"></label>
+		<input asp-for="Name" type="text" class="form-control text-primary"/>
+		<span asp-validation-for="Name" class="text-danger"></span>
+	</div>
+	<div>
+		<label asp-for="Class"></label>
+		<input asp-for="Class" type="text" class="form-control"/>
+		<span asp-validation-for="Class" class="text-danger"></span>
+	</div>
+	<div>
+		<label asp-for="Grade"></label>
+		<input asp-for="Grade" type="text" class="form-control"/>
+		<span asp-validation-for="Grade" class="text-danger"></span>
+	</div>
+	<div>
+		<label asp-for="Address"></label>
+		<input asp-for="Address" type="text" class="form-control"/>
+		<span asp-validation-for="Address" class="text-danger"></span>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-6">
+		<button type="submit" class="btn btn-primary form-control">Update</button>
+		</div>
+		<div class="col-6 text-end">
+		<a asp-controller="Student" asp-action="Index" class="btn btn-info form-control col-6">Back To List</a>
+		</div>
+	</div>
+</form>
+@section Scripts {
+	@{
+							<partial name="_ValidationScriptsPartial" />
+		// we add this here for the client side validation for not reaching on the server for validation and showing the error
+	}
+}
+

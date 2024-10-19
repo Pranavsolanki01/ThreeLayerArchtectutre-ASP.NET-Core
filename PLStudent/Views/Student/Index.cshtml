@@ -1,0 +1,117 @@
+﻿@using DALStudent.Entities;
+@model List<Student>;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="row pt-4 pb-2">
+        <div class="col-6">
+            <h2>Students</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Student" asp-action="Create" class="btn btn-primary">
+                Add New Student
+            </a>
+        </div>
+    </div>
+     <div class="row pt-4 pb-2">
+        <div class="col-12">
+            <form id="searchForm" asp-controller="Student" asp-action="Index" method="get" class="d-flex">
+                <input type="text" id="searchInput" name="searchString" class="form-control me-2" placeholder="Search by Name" onkeyup="filterTable()" />
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </form>
+        </div>
+    </div>
+    <hr />
+    <table class="table table-primary table-bordered table-striped" id="studentsTable">
+    <thead>
+     <tr>
+        <th>Student-ID</th>
+        <th>Student Name</th>
+        <th>Student Class</th>
+        <th>Student Grade</th>
+        <th>Student Address</th>
+        <th>Action Buttons</th>
+    </tr>
+   </thead>
+   <tbody class="table-light">
+            @foreach (var obj in Model)
+            {
+               <tr>
+                    <td>@obj.Id</td>
+                    <td>@obj.Name</td>
+                    <td>@obj.Class</td>
+                    <td>@obj.Grade</td>
+                    <td>@obj.Address</td>
+                    <td>
+                        <a asp-controller="Student" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-warning">Edit</a>
+                        <button type="button" class="btn btn-danger" onclick="openDeleteModal(@obj.Id, '@obj.Name')">Delete</button>
+                    </td>
+                </tr>
+            }
+
+    </tbody>
+ </table>
+</div>
+
+<!--Pop-Up model for Delete Confirmation-->
+
+<div id="deleteModal" class="modal fade"  role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="studentName"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+            <script>
+                function openDeleteModal(id, name) //getting the value delete button from the index delete button as i pass (Id, Name)
+                {
+                    document.getElementById("studentName").textContent = name; // use to display the name which is accepted by the openDeleteMOdel fuction in js from the index.cshtml file
+                    var form = document.getElementById("deleteForm");//deleteFrom is id from of popup where is my Delete btn. & this is final action called when i press the delete button on the Pop-Up box
+                    form.action = "/Student/Delete/" + id; // went to the student controller and perform the Delete IActionResult
+                    $('#deleteModal').modal('show');// deleteModel is id of the main pop-up div 
+                }
+
+
+                    function filterTable() {
+                        var input = document.getElementById("searchInput");
+                        var filter = input.value.toLowerCase();
+                        var table = document.getElementById("studentsTable");
+                        var tr = table.getElementsByTagName("tr");
+
+                        for (var i = 1; i < tr.length; i++) { //i start from 1 to skip header row
+                          var td = tr[i].getElementsByTagName("td")[1]; //by [1] i get the second column (Student Name)
+                          if (td) {
+                            if (td.innerHTML.toLowerCase().indexOf(filter) > -1) { // check the content of the name is matched with the input or not
+                                tr[i].style.display = "";
+                                tr[i].style.opacity = 1;
+                             } else {
+                                tr[i].style.display = "none";
+                                tr[i].style.opacity = 0.5;
+                             }
+                          }
+                        }
+                    }
+            </script>
+}
+
+
